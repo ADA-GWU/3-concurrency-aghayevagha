@@ -8,9 +8,10 @@ The provided java code takes an image, finds the average color of given size of 
 <br>
 <br>
 ## Dependencies
-Java Development Kit (JDK)
-Java Advanced Imaging (JAI) library (for advanced image processing features)
-Swing
+
+ - Java Development Kit (JDK)
+ - Java Advanced Imaging (JAI) library (for advanced image processing features)
+ - Swing
 <br><br>
 ## How to run
 You may use any IDE, as arguments enter the image file name, pixel size, and threading option (S for single thread, M for the number of available cores) in the following order given. 
