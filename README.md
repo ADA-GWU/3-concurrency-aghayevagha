@@ -21,7 +21,7 @@ ImageProcessing.java: The main Java file containing the image processing logic, 
 <br><br>
 ## How it works
 The application processes the input image by dividing it into blocks, calculating the average color of each block, and replacing the pixels in that block with the calculated average color. The process is done concurrently using multiple threads for improved performance.
-<br>Two main functions are used:<br>
+<br>Two functions are used:<br>
    - processImageSection - threads call this function for processing the image, it extracts image colors, find their averages and replaces them.
    - scaleImage - images which exceed the screen size are formatted on the height or width
 
