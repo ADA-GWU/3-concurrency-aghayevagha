@@ -24,6 +24,6 @@ The application processes the input image by dividing it into blocks, calculatin
 <br>Two functions are used:<br>
    - processImageSection - threads call this function for processing the image, it extracts image colors, find their averages and replaces them.
    - scaleImage - images which exceed the screen size are formatted on the height or width
-
+   - saveOriginal - if the image size is downscaled for visualizing reasons, the function saves the image based on unscaled size
 
 
