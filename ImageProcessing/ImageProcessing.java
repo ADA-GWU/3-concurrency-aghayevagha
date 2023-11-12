@@ -42,13 +42,15 @@ public class ImageProcessing {
             // Scale down the image if it exceeds the maximum display dimensions
             // the image can exceed the screen either on height or width or both, change which exceeds
             BufferedImage displayImage;
+            boolean changed=true;
             if(originalHeight>maxHeightForDisplay && originalWidth> maxWidthForDisplay){
                 displayImage = scaleImage(inputImage, maxWidthForDisplay, maxHeightForDisplay);}
             else if(originalHeight>maxHeightForDisplay ){
                  displayImage = scaleImage(inputImage, originalWidth, maxHeightForDisplay);}
             else if(originalWidth> maxWidthForDisplay){
                 displayImage = scaleImage(inputImage, maxWidthForDisplay, originalHeight);}
-            else { displayImage=inputImage;}
+            else { displayImage=inputImage;
+            changed=false;}
 
             // Create a BufferedImage for the output image
             BufferedImage outputImage=displayImage;
@@ -88,13 +90,52 @@ public class ImageProcessing {
             executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
             // Save the final output image
-            File outputImageFile = new File("result.jpg");
-            boolean b=ImageIO.write(outputImage, "jpg", outputImageFile);
-            if(b) System.out.println("saved");
-            else System.out.println("couldn't be saved");
+            File outputImageFile = new File("C:/workspacejava/result.jpg");
+
+            //if image is changed, save original one
+            if(changed){
+                ImageIO.write(saveOriginal(inputImage,squareSize), "jpg", outputImageFile);
+            }
+            else {
+                ImageIO.write(outputImage, "jpg", outputImageFile);
+            }
         } catch ( IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    //for larger images, we need to save based on original size
+    public static BufferedImage saveOriginal(BufferedImage inputImage,int squareSize) {
+        int width = inputImage.getWidth();
+        int height = inputImage.getHeight();
+        for (int y = 0; y < height; y += squareSize) {
+            for (int x = 0; x < width; x += squareSize) {
+
+                // Calculate the average color of the 2x2 square
+                int avgRed = 0, avgGreen = 0, avgBlue = 0;
+                int pixelCount = 0;
+                for (int i = x; i < x + squareSize && i < width; i++) {
+                    for (int j = y; j < y + squareSize && j < height; j++) {
+                        int rgb = inputImage.getRGB(i, j);
+                        avgRed += (rgb >> 16) & 0xFF;
+                        avgGreen += (rgb >> 8) & 0xFF;
+                        avgBlue += rgb & 0xFF;
+                        pixelCount++;
+                    }
+                }
+                avgRed /= pixelCount;
+                avgGreen /= pixelCount;
+                avgBlue /= pixelCount;
+                int avgColor = (avgRed << 16) | (avgGreen << 8) | avgBlue;
+
+                // Set the average color in the output image
+                for (int i = x; i < x + squareSize && i < width; i++) {
+                    for (int j = y; j < y + squareSize && j < height; j++) {
+                        inputImage.setRGB(i, j, avgColor);
+                    }
+                }
+            }
+        }
+        return inputImage;
     }
     //create a function for replacing the pixels
     private static void processImageSection(BufferedImage inputImage, BufferedImage outputImage, int startY, int squareSize, int width, int blockSize, JLabel label) {
