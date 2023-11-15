@@ -14,7 +14,14 @@ The provided java code takes an image, finds the average color of given size of 
  - Swing
 <br><br>
 ## How to run
-You may use any IDE, as arguments enter the image file name, pixel size, and threading option (S for single thread, M for the number of available cores) in the following order given. 
+On the command line as arguments enter the image file name, pixel size, and threading option (S for single thread, M for the number of available cores) in the following order given. <br> Compile the file
+```
+javac .\ImageProcessing.java
+```
+<br> Here is an example of parametres
+```
+java .\ImageProcessing.java .\image\bigone.jpg 16 M
+```
 <br><br>
 ## Project Structure
 ImageProcessing.java: The main Java file containing the image processing logic, should be in the main package.
@@ -25,5 +32,5 @@ The application processes the input image by dividing it into blocks, calculatin
    - processImageSection - threads call this function for processing the image, it extracts image colors, find their averages and replaces them.
    - scaleImage - images which exceed the screen size are formatted on the height or width
    - saveOriginal - if the image size is downscaled for visualizing reasons, the function saves the image based on unscaled size
-
+For the big images, scaling the image everytime after changing a small square is not efficient, therefore in such case the image is just simply reprocessed.
 
