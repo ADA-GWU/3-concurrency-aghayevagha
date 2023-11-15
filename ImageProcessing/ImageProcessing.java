@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -14,18 +13,13 @@ public class ImageProcessing {
     public static void main(String[] args) {
         try {
             // Load the input variables
-            //file name , pixel size, and S or M
-            Scanner sc=new Scanner(System.in);
-
-            String fileName=sc.nextLine();
+            String fileName=args[0];
 
             // Define the square size
-            int squareSize = sc.nextInt();
-            //initialize a new scanner to avoid problems for console input
-            sc=new Scanner(System.in);
+            int squareSize = Integer.parseInt(args[1]);
 
-            //Number of threads
-            String th=sc.nextLine();
+            //thread type
+            String th=args[2];
 
             //load the image
             BufferedImage inputImage = ImageIO.read(new File(fileName));
@@ -70,8 +64,8 @@ public class ImageProcessing {
             // Specify the number of cores
             int numCores;
             if(th.equals("S")) numCores=1;
-            else numCores= Runtime.getRuntime().availableProcessors();
-
+            else if(th.equals("M"))numCores= Runtime.getRuntime().availableProcessors();
+            else throw new IllegalArgumentException("Not supported!");
 
             // Create an ExecutorService with the specified number of threads
             ExecutorService executorService = Executors.newFixedThreadPool(numCores);
@@ -90,7 +84,7 @@ public class ImageProcessing {
             executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
             // Save the final output image
-            File outputImageFile = new File("C:/workspacejava/result.jpg");
+            File outputImageFile = new File("result.jpg");
 
             //if image is changed, save original one
             if(changed){
